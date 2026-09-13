@@ -23,5 +23,4 @@ int main()
     }
     printf("No repeated character");
     return 0;
-    
 }
