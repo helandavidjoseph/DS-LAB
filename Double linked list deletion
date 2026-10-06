@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node
+{
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+struct Node *head = NULL;
+void create(int n) 
+{
+    struct Node *newNode, *temp;
+    int i, data;
+    for (i = 1; i <= n; i++)
+  {
+        newNode = (struct Node *)malloc(sizeof(struct Node));
+        printf("Enter data for node %d: ", i);
+        scanf("%d", &data);
+        newNode->data = data;
+        newNode->prev = NULL;
+        newNode->next = NULL;
+        if (head == NULL)
+        {
+            head = newNode;
+        }
+        else 
+        {
+            temp = head;
+            while (temp->next != NULL)
+                temp = temp->next;
+            temp->next = newNode;
+            newNode->prev = temp;
+        }
+    }
+}
+void display()
+{
+    struct Node *temp = head;
+    printf("Doubly Linked List: ");
+    while (temp != NULL)
+    {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+void deleteBeginning() 
+{
+    struct Node *temp;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    temp = head;
+    head = head->next;
+    if (head != NULL)
+        head->prev = NULL;
+    free(temp);
+}
+void deleteEnd() 
+{
+    struct Node *temp;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    if (temp->prev != NULL)
+        temp->prev->next = NULL;
+    else
+        head = NULL;
+    free(temp);
+}
+void deletePosition()
+{
+    struct Node *temp;
+    int pos, i;
+    printf("Enter position: ");
+    scanf("%d", &pos);
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    temp = head;
+    for (i = 1; i < pos && temp != NULL; i++)
+        temp = temp->next;
+    if (temp == NULL)
+    {
+        printf("Invalid position\n");
+        return;
+    }
+   if (temp->prev != NULL)
+        temp->prev->next = temp->next;
+    else
+        head = temp->next;
+   if (temp->next != NULL)
+        temp->next->prev = temp->prev;
+   free(temp);
+}
+int main() 
+{
+    int n;
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+    create(n);
+    printf("\nOriginal List:\n");
+    display();
+    printf("\nDeletion at beginning:\n");
+    deleteBeginning();
+    display();
+    printf("\nDeletion at end:\n");
+    deleteEnd();
+    display();
+    printf("\nDeletion at specific position:\n");
+    deletePosition();
+    display();
+    return 0;
+}
